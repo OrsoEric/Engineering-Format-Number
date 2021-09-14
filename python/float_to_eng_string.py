@@ -3,7 +3,6 @@ import logging
 
 ##  Generate engineering format string
 #   the conversion is not done using the builting number to string function, due to the need to exactly control digits sign and separator
-#   
 def float_to_eng_string(source : float, significant_digits : int= 4  ) -> str() :
      
     #----------------------------------------------------
@@ -55,21 +54,14 @@ def float_to_eng_string(source : float, significant_digits : int= 4  ) -> str() 
         #sweet spot
         else:
             x_done = False
-            n_margin = (50)/(10**significant_digits)
-            logging.debug(f"margin: {n_margin}")
+            #n_margin = (50)/(10**significant_digits)
+            #logging.debug(f"margin: {n_margin}")
             #scan the three possible bases after normalization
             for base in [100.0, 10.0, 1.0]:
                 #if the value is within the scan limit
                 if (value >= base):
-                    #if the value would be rounded UP because i have >0.5 as reminder after the least significant digit is processed
-                    if (value > base *10.0 *(1 -n_margin)):
-                        #round up and retry renormalization
-                        value += base *10.0 *(n_margin)
-                        logging.debug(f"rounding detected | value: {value}")
-                    #if value is right level of renormalizaion
-                    else:
                         x_done = True
-                        logging.debug(f"normalization complete | value: {value} {base *10.0 *(1 -n_margin)} | base: {base}")
+                        logging.debug(f"normalization complete | value: {value} | base: {base}")
                         break
                 #if the value is below scan limit
                 else:
@@ -106,7 +98,11 @@ def float_to_eng_string(source : float, significant_digits : int= 4  ) -> str() 
 
             #add the digit to the string
             if ((digit_int < 0) or (digit_int > 9)):
-                logging.error(f'ERR digit out of range | value: {value} | base: {base} | digit: {digit_int} | index: {digit_index}')
+                #re-execute by rounding now that I know that I must round
+                value = source +(10**(3*exp_index))*(50)/(10**significant_digits)
+                logging.debug(f'rounding detected! | {exp_index} {(10**(3*exp_index))*(50)/(10**significant_digits)} | value: {source} ->  base: {value}')
+                return float_to_eng_string(value, significant_digits  )
+
             output_str += f"{digit_int}"
             digit_index += 1
             #if value is reduced below unity, i need to place a point
