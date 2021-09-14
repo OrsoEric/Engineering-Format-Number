@@ -9,8 +9,8 @@ def main():
     #test_vector = [ 234.56 ]
     #test_vector = [ 999.99999 ]
     #test_vector = [ 0.33 ]
-    #test_vector = [ 99.999999 ]
-    test_vector = [0.1, 0.33, 1.0, 3.34, 9.99999, 10.0, 33.412, 99.999999, 100.0, 345.6, 456.123, 456.789, 999.99999, 1000.00001, 5000.0, 60000.0, 700000.0, 999999.999999, 1000000.000009]
+    test_vector = [ 15796543 ]
+    #test_vector = [0.1, 0.33, 1.0, 3.34, 9.99999, 10.0, 33.412, 99.999999, 100.0, 345.6, 456.123, 456.789, 999.99999, 1000.00001, 5000.0, 60000.0, 700000.0, 999999.999999, 1000000.000009, 15796543]
     for value in test_vector:
 
         temp_str = float_to_eng_string(value)
@@ -29,8 +29,8 @@ def main():
 if __name__ == '__main__':
     logging.basicConfig(
         #level of debug to show
-        #level=logging.DEBUG,
-        level=logging.INFO,
+        level=logging.DEBUG,
+        #level=logging.INFO,
         #header of the debug message
         format='[%(asctime)s] %(levelname)s: %(message)s',
     )
